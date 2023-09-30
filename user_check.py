@@ -1,5 +1,6 @@
 # Import required modules
 import subprocess
+import pandas as pd
 from openpyxl import load_workbook
 from datetime import datetime
 from pathlib import Path
@@ -32,23 +33,22 @@ class UserCheckLogic():
         """
         Perform the check of user status based on Excel file and updates it with results.
         """
-        # Open the Excel file
+        # Open the Excel file with openpyxl
         self.workbook = load_workbook(self.excel_file)
         self.sheet = self.workbook.active
         self.sheet.title = f"Provjera_{self.current_time()}"
 
-        # Find the indexes of column "Username" and "Account Status"
-        username_col_pos = 2  # Column B
-        account_status_col_pos = 5  # Column E
+        # Open it with DataFrame to enable search by column names, regardless of position
+        self.df = pd.read_excel(self.excel_file)
 
-        # Set the initial row to second row so we would ignore column titles
-        start_row = 2
+        # Find the positions of "Username" and "Account Status" columns
+        username_col_name = "Username"
+        account_status_col_name = "Account Status" 
 
-        # Iterating through rows via "Username" column
-        for row in self.sheet.iter_rows(min_row=start_row, min_col=username_col_pos,
-                                        values_only=True):
-            username_column = row[0]  # Iterate through "Username" column
-            if username_column is not None: # Check if username values are not emtpy
+        # Iterating through rows using DataFrame
+        for index, row in self.df.iterrows():
+            username_column = row[username_col_name]  # Iterate through "Username" column
+            if pd.notna(username_column): # Check if username values are not emtpy
                 # Split username to remove domain if present
                 username_parts = username_column.split("/")
                 username = username_parts[-1]  # Take the last part as username
@@ -66,12 +66,14 @@ class UserCheckLogic():
                     account_status = "User not found"
 
                 # Update the Excel file with gathered information
-                self.sheet.cell(row=start_row, column=account_status_col_pos,
+                self.sheet.cell(row=index + 2,
+                                column=self.df.columns.get_loc(account_status_col_name) + 1,
                                 value=account_status)
             else:
-                self.sheet.cell(start_row, column=account_status_col_pos,
+                self.sheet.cell(row=index + 2,
+                                column=self.df.columns.get_loc(account_status_col_name) + 1,
                                 value="No username provided")
-            start_row += 1  # Increase the row number for next entry
+        
 
     def save_to_file(self):
         """Save to Excel file"""
