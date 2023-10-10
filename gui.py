@@ -25,12 +25,13 @@ class UserCheckGUI():
 
         # Description Label
         self.description_lbl = Label(window, bg="light yellow",
-                                     text="Molimo odaberite Excel tablicu")
-        self.description_lbl.grid(column=0, row=0, sticky="w")
+                                     text="Molimo odaberite Excel tablicu - podržani formati su \".xls\", \".xlsx\" i \".xlsm\".\nProgram provjerava korisnike iz stupca \"Username\" i vraća status u stupac \"Account Status\",\nneovisno o njihovoj poziciji stupaca. Pobrinite se samo da u tablici postoje stupci navedenih naziva\ni da se nazivi stupaca nalaze u prvom redu.",
+                                     anchor="w", justify="left", width=75, padx=5, pady=5)
+        self.description_lbl.grid(column=0, row=0)
 
         # Selected table entry
         self.selected_table_name_ent = Entry(window, bg="light yellow",
-                                             state="disabled", width=50)
+                                             state="disabled", width=75)
         self.selected_table_name_ent.grid(column=0, row=1, padx=10, sticky="w")
 
         # Is table selected label
