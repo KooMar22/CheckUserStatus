@@ -61,10 +61,13 @@ class UserCheckGUI():
 
     def start_check(self):
         """Start the check - get it from the UserCheckLogic class"""
-        if self.excel_file:
-            user_check = UserCheckLogic(self.excel_file)
-            user_check.check_user_status()
-            user_check.save_to_file()
-            messagebox.showinfo("Info", "Provjera korisničkih statusa je završena.")
-        else:
-            messagebox.showerror("Pogreška", "Molimo odaberite Excel tablicu prije pokretanja provjera.")
+        try:
+            if self.excel_file:
+                user_check = UserCheckLogic(self.excel_file)
+                user_check.check_user_status()
+                user_check.save_to_file()
+                messagebox.showinfo("Info", "Provjera korisničkih statusa je završena.")
+            else:
+                messagebox.showerror("Pogreška", "Molimo odaberite Excel tablicu prije pokretanja provjera.")
+        except ValueError as e:
+            messagebox.showerror("Pogreška", str(e))

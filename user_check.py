@@ -41,6 +41,14 @@ class UserCheckLogic():
         # Open it with DataFrame to enable search by column names, regardless of position
         self.df = pd.read_excel(self.excel_file)
 
+        # Check if "Username" column exists
+        if "Username" not in self.df.columns:
+            raise ValueError("Stupac \"Username\" nije pronađen u Excel datoteci.")
+
+        # Check if "Account Status" column exists
+        if "Account Status" not in self.df.columns:
+            raise ValueError("Stupac \"Account Status\" nije pronađen u Excel datoteci.")
+
         # Find the positions of "Username" and "Account Status" columns
         username_col_name = "Username"
         account_status_col_name = "Account Status" 
