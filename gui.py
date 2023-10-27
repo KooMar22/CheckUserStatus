@@ -13,13 +13,16 @@ class UserCheckGUI():
         self.window.columnconfigure(0, weight=1)  # Resize the width
         self.window.rowconfigure(0, weight=1)  # Resize the height
 
-        # Calculate the screen center
+        window_width = 600
+        window_height = 150
+
+        # Initiate the GUI on the screen center
         screen_width = self.window.winfo_screenwidth()
         screen_height = self.window.winfo_screenheight()
-        x = (screen_width - self.window.winfo_reqwidth()) // 2
-        y = (screen_height - self.window.winfo_reqheight()) // 2
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
         # Set the window to the screen center
-        self.window.geometry("+%d+%d" % (x, y))
+        self.window.geometry("{}x{}+{}+{}".format(window_width, window_height, x, y))
 
         self.excel_file = ""
 
